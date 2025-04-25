@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario - Inicio</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 100px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 3em;
+        }
+
+        .botones {
+            margin-top: 40px;
+        }
+
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+<h1>Bienvenido al Sistema de Inventario</h1>
+<div class="botones">
+    <a th:href="@{/login}"><button class="btn">Iniciar Sesión</button></a>
+    <a th:href="@{/registro}"><button class="btn">Registrarse</button></a>
+</div>
+</body>
+</html>

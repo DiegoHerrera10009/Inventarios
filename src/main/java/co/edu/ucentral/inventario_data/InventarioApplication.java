@@ -1,13 +1,13 @@
-package co.edu.ucentral.disquera;
+package co.edu.ucentral.inventario_data;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DisqueraApplication {
+public class InventarioApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DisqueraApplication.class, args);
+		SpringApplication.run(InventarioApplication.class, args);
 	}
 
 }

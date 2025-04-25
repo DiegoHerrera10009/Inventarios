@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fefefe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #34495e;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2471a3;
+        }
+
+        .mensaje {
+            text-align: center;
+            color: green;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="form-container">
+    <h2>Registro</h2>
+    <form th:action="@{/registro}" method="post" th:object="${usuario}">
+        <input type="text" th:field="*{username}" placeholder="Usuario" required>
+        <input type="password" th:field="*{password}" placeholder="Contraseña" required>
+        <button type="submit">Registrarse</button>
+    </form>
+
+    <div class="mensaje" th:if="${registroExitoso}">
+        ¡Usuario registrado con éxito!
+    </div>
+</div>
+</body>
+</html>
