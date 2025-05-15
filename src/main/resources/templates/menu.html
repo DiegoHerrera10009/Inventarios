@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú Principal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('/images/FondoBodega1.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .menu-box {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .menu-grid a {
+            display: block;
+            padding: 14px;
+            background-color: #6e4c1e;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-grid a:hover {
+            background-color: #8e5c28;
+        }
+
+        @media (max-width: 500px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="menu-box">
+    <h2>MENÚ PRINCIPAL</h2>
+    <div class="menu-grid">
+        <a th:href="@{/producto/formulario}">Agregar Producto</a>
+        <a th:href="@{/producto/lista}">Ver Productos</a>
+        <a th:href="@{/salida/formulario}">Registrar Salida</a>
+        <a th:href="@{/}">Cerrar Sesión</a>
+    </div>
+</div>
+</body>
+</html>

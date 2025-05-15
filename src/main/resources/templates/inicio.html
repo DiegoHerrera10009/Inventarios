@@ -2,46 +2,70 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Inventario - Inicio</title>
+    <title>PuntoBodega - Inicio</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
-            text-align: center;
-            padding: 100px;
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
+            background-image: url('/images/inicio.png'); /* Usa tu imagen aquí */
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .contenido {
+            margin-left: 80px;
         }
 
         h1 {
-            color: #333;
-            font-size: 3em;
+            font-size: 60px;
+            color: #000;
+            font-style: italic;
+            font-weight: bold;
+            margin-bottom: 50px;
         }
 
-        .botones {
-            margin-top: 40px;
-        }
-
-        .btn {
-            background-color: #3498db;
-            color: white;
+        .boton {
+            display: flex;
+            align-items: center;
+            background-color: #8B5E3C;
+            color: #fff;
             border: none;
-            padding: 15px 30px;
-            margin: 10px;
-            font-size: 16px;
+            padding: 15px 25px;
+            margin-bottom: 25px;
+            font-size: 18px;
+            border-radius: 30px;
+            width: 220px;
             cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
+            text-decoration: none;
+            font-weight: bold;
         }
 
-        .btn:hover {
-            background-color: #2980b9;
+        .boton::before {
+            content: '';
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .boton:hover {
+            background-color: #6c452d;
         }
     </style>
 </head>
 <body>
-<h1>Bienvenido al Sistema de Inventario</h1>
-<div class="botones">
-    <a th:href="@{/login}"><button class="btn">Iniciar Sesión</button></a>
-    <a th:href="@{/registro}"><button class="btn">Registrarse</button></a>
+<div class="contenido">
+    <h1>PUNTOBODEGA</h1>
+    <a th:href="@{/login}" class="boton">Iniciar Sesión</a>
+    <a th:href="@{/registro}" class="boton">Registrarse</a>
 </div>
 </body>
 </html>

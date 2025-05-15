@@ -4,60 +4,120 @@
     <meta charset="UTF-8">
     <title>Iniciar Sesión</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #ecf0f1;
+            background-image: url('/images/registro_fondo.png');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            position: relative;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
         }
 
         .form-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 300px;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 350px;
         }
 
         h2 {
-            text-align: center;
-            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #000;
+            font-weight: bold;
         }
 
-        input[type="text"], input[type="password"] {
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 6px;
-            border: 1px solid #ccc;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 50px;
+            text-align: center;
+            font-weight: bold;
+            background-color: #fff;
+            color: #000;
         }
 
         button {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px;
             width: 100%;
-            border-radius: 6px;
+            padding: 15px;
+            border: none;
+            border-radius: 50px;
+            background-color: #6e4c1e; /* Café */
+            color: #fff;
+            font-weight: bold;
             font-size: 16px;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         button:hover {
-            background-color: #219150;
+            background-color: #8e5c28;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 400px) {
+            .form-container {
+                width: 90%;
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
 <body>
+<div class="overlay"></div>
 <div class="form-container">
-    <h2>Iniciar Sesión</h2>
-    <form th:action="@{/login}" method="post">
-        <input type="text" name="username" placeholder="Correo o usuario" required>
-        <input type="password" name="password" placeholder="Contraseña" required>
+    <h2>INICIAR SESIÓN</h2>
+    <form th:action="@{/login}" method="post" th:object="${usuario}">
+        <input type="text" th:field="*{nombre}" placeholder="Nombre de usuario" required>
+        <input type="password" th:field="*{contrasena}" placeholder="Contraseña" required>
         <button type="submit">Entrar</button>
     </form>
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+    <a th:href="@{/}">Volver al inicio</a>
 </div>
 </body>
 </html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Salida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-image: url('/images/FondoBodega1.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .form-box {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 450px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2d3436;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #6e4c1e;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #8e5c28;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="overlay"></div>
+<div class="form-box">
+    <h2>Registrar Salida de Producto</h2>
+    <form th:action="@{/salida/registrar}" th:object="${salida}" method="post">
+        <label>Producto:</label>
+        <select th:field="*{producto.id}" required>
+            <option th:each="prod : ${productos}" th:value="${prod.id}" th:text="${prod.nombre}"></option>
+        </select>
+
+        <label>Cantidad:</label>
+        <input type="number" th:field="*{cantidad}" min="1" required>
+
+        <label>Motivo:</label>
+        <input type="text" th:field="*{motivo}" required>
+
+        <button type="submit">Registrar Salida</button>
+    </form>
+
+    <div class="error" th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+
+    <a class="back-link" th:href="@{/menu}">Atrás</a>
+</div>
+</body>
+</html>

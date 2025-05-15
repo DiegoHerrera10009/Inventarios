@@ -13,19 +13,11 @@ public class ProductoServicio {
     @Autowired
     private ProductoRepositorio productoRepositorio;
 
-    public List<Producto> listarTodos() {
-        return productoRepositorio.findAll();
-    }
-
-    public void guardar(Producto producto) {
+    public void guardarProducto(Producto producto) {
         productoRepositorio.save(producto);
     }
 
-    public Producto buscarPorId(Long id) {
-        return productoRepositorio.findById(id).orElse(null);
-    }
-
-    public void eliminar(Long id) {
-        productoRepositorio.deleteById(id);
+    public List<Producto> obtenerTodos() {
+        return productoRepositorio.findAll();
     }
 }
