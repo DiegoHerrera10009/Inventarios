@@ -2,107 +2,80 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Productos</title>
-    <style>
-        body {
-            background-image: url('/images/FondoBodega1.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.4);
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 800px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2d3436;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-
-        th {
-            background-color: #dfe6e9;
-        }
-
-        a.button {
-            display: inline-block;
-            background-color: #6e4c1e;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            margin: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        a.button:hover {
-            background-color: #8e5c28;
-        }
-
-        .botones {
-            text-align: center;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Inventario de Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css}">
 </head>
-<body>
-<div class="overlay"></div>
-<div class="container">
-    <h2>Lista de Productos</h2>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-        </tr>
-        <tr th:each="producto : ${productos}">
-            <td th:text="${producto.id}">ID</td>
-            <td th:text="${producto.nombre}">Nombre</td>
-            <td th:text="${producto.cantidad}">Cantidad</td>
-            <td th:text="${producto.precio}">Precio</td>
-        </tr>
-    </table>
+<body class="industrial">
+    <header class="navbar">
+        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
+        <nav class="navbar-actions">
+            <a th:href="@{/menu}">Menú</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+        </nav>
+    </header>
 
-    <div class="botones">
-        <a class="button" th:href="@{/producto/formulario}">Agregar Nuevo Producto</a>
-        <a class="button" th:href="@{/menu}">Volver al Menú</a>
-    </div>
-</div>
+    <main style="padding: 2rem 1.5rem;">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-header-icon">📦</div>
+                <div class="panel-header-text">
+                    <h2>Inventario de repuestos</h2>
+                    <p class="subtitle">Repuestos para vehículos y equipos diesel (generadores eléctricos). Consulta y gestiona tu bodega.</p>
+                </div>
+            </div>
+
+            <form th:action="@{/producto/lista}" method="get" class="busqueda-inventario" style="margin-bottom: 1.25rem;">
+                <input type="search" name="q" th:value="${busqueda}" placeholder="Buscar por referencia (código) o nombre..." style="max-width: 320px; margin-right: 0.5rem;" />
+                <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">Buscar</button>
+                <a th:if="${busqueda != null and !#strings.isEmpty(busqueda)}" th:href="@{/producto/lista}" class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-left: 0.5rem;">Ver todo</a>
+            </form>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Marca</th>
+                            <th>Stock</th>
+                            <th>Mín.</th>
+                            <th>Precio</th>
+                            <th>Ficha</th>
+                            <th>Añadir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="producto : ${productos}">
+                            <td>
+                                <img th:if="${producto.imagenNombre != null}"
+                                     th:src="@{'/uploads/' + ${producto.imagenNombre}}"
+                                     alt="Foto repuesto"
+                                     class="foto-miniatura" />
+                            </td>
+                            <td th:text="${producto.codigo}">—</td>
+                            <td th:text="${producto.nombre}">—</td>
+                            <td th:text="${producto.marca}">—</td>
+                            <td th:text="${producto.cantidad}">—</td>
+                            <td th:text="${producto.stockMinimo}">—</td>
+                            <td th:text="${'$ ' + #numbers.formatDecimal(producto.precio, 1, 'POINT', 2, 'COMMA')}">—</td>
+                            <td>
+                                <a th:href="@{/producto/ficha/{id}(id=${producto.id})}" class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;">Ver ficha</a>
+                            </td>
+                            <td>
+                                <a th:href="@{/producto/entrada-stock/{id}(id=${producto.id})}" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.85rem;">Añadir stock</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/producto/formulario}" class="btn btn-primary">Agregar repuesto</a>
+                <a th:href="@{/menu}" class="btn btn-secondary">Volver al menú</a>
+            </div>
+        </div>
+    </main>
 </body>
 </html>

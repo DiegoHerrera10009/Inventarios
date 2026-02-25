@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Añadir stock - Inventario Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+    <style>
+        .ficha-fila { display: grid; grid-template-columns: 120px 1fr; gap: 0.75rem; align-items: baseline; }
+        .ficha-fila .etiqueta { color: var(--industrial-text-muted); font-size: 0.85rem; font-weight: 600; }
+        .ficha-fila .valor { color: var(--industrial-text); }
+    </style>
+</head>
+<body class="industrial">
+    <header class="navbar">
+        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
+        <nav class="navbar-actions">
+            <a th:href="@{/producto/lista}">Inventario</a>
+            <a th:href="@{/menu}">Menú</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+        </nav>
+    </header>
+
+    <main style="padding: 2rem 1.5rem;">
+        <div class="panel" style="max-width: 420px;">
+            <div class="panel-header">
+                <div class="panel-header-icon">📥</div>
+                <div class="panel-header-text">
+                    <h2>Añadir stock a la misma referencia</h2>
+                    <p class="subtitle">Incremente las unidades del repuesto ya creado.</p>
+                </div>
+            </div>
+
+            <div class="ficha-fila" style="margin-bottom: 1rem;">
+                <span class="etiqueta">Repuesto</span>
+                <span class="valor" th:text="${producto.codigo + ' — ' + producto.nombre}">—</span>
+            </div>
+            <div class="ficha-fila" style="margin-bottom: 1.5rem;">
+                <span class="etiqueta">Stock actual</span>
+                <span class="valor" th:text="${producto.cantidad}">0</span>
+            </div>
+
+            <form th:action="@{/producto/entrada-stock/{id}(id=${producto.id})}" method="post">
+                <label>Cantidad a añadir</label>
+                <input type="number" name="cantidad" min="1" required placeholder="Mínimo 1" />
+                <button type="submit">Añadir al stock</button>
+            </form>
+
+            <a th:href="@{/producto/ficha/{id}(id=${producto.id})}" class="form-link">← Ver ficha del repuesto</a>
+            <a th:href="@{/producto/lista}" class="form-link">← Volver al inventario</a>
+        </div>
+    </main>
+</body>
+</html>

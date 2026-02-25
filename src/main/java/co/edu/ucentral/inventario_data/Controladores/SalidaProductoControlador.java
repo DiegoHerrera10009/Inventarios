@@ -38,4 +38,10 @@ public class SalidaProductoControlador {
             return "formulario_salida";
         }
     }
+
+    @GetMapping("/historial")
+    public String verHistorial(Model modelo) {
+        modelo.addAttribute("salidas", salidaServicio.obtenerHistorial());
+        return "historial_salidas";
+    }
 }

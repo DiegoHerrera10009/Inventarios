@@ -2,116 +2,149 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nuevo Producto</title>
-    <style>
-        body {
-            background-image: url('/images/FondoBodega1.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 100vh;
-            font-family: 'Segoe UI', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-color: rgba(0, 0, 0, 0.4);
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        .form-box {
-            position: relative;
-            z-index: 1;
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 400px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #2d3436;
-        }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            color: #2d3436;
-            font-weight: bold;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 6px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
-
-        button {
-            width: 100%;
-            margin-top: 20px;
-            padding: 12px;
-            background-color: #6e4c1e;
-            color: white;
-            font-size: 16px;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #8e5c28;
-        }
-
-        .links {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .links a {
-            display: block;
-            color: black;
-            text-decoration: none;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .links a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registrar repuesto - Inventario Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css}">
 </head>
-<body>
-<div class="overlay"></div>
-<div class="form-box">
-    <h2>Registrar Nuevo Producto</h2>
-    <form th:action="@{/producto/guardar}" th:object="${producto}" method="post">
-        <label>Nombre:</label>
-        <input type="text" th:field="*{nombre}" required />
+<body class="industrial">
+    <header class="navbar">
+        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
+        <nav class="navbar-actions">
+            <a th:href="@{/producto/lista}">Ver inventario</a>
+            <a th:href="@{/menu}">Menú</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+        </nav>
+    </header>
 
-        <label>Cantidad:</label>
-        <input type="number" th:field="*{cantidad}" required />
+    <main style="padding: 2rem 1.5rem;">
+        <div class="panel" style="max-width: 520px;">
+            <div class="panel-header">
+                <div class="panel-header-icon">➕</div>
+                <div class="panel-header-text">
+                    <h2>Registrar nuevo repuesto</h2>
+                    <p class="subtitle">Alta de repuesto para vehículos o equipos diesel (generadores).</p>
+                </div>
+            </div>
 
-        <label>Precio:</label>
-        <input type="number" step="0.01" th:field="*{precio}" required />
+            <form id="formRepuesto" th:action="@{/producto/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data">
+                <label>Código / Referencia (único)</label>
+                <input type="text" th:field="*{codigo}" placeholder="Ej: FS1242 — no se puede repetir" required />
+                <p class="error" th:if="${errorCodigo}" th:text="${errorCodigo}"></p>
 
-        <button type="submit">Guardar</button>
-    </form>
-    <div class="links">
-        <a th:href="@{/producto/lista}">Ver lista de productos</a>
-        <a th:href="@{/menu}">Volver al Menú</a>
-    </div>
-</div>
+                <label>Nombre del repuesto</label>
+                <input type="text" th:field="*{nombre}" placeholder="Ej: Filtro de aceite" required />
+
+                <label>Marca</label>
+                <input type="hidden" th:field="*{marca}" />
+                <select id="marcaSelect">
+                    <option value="">Seleccione...</option>
+                    <option value="Perkins">Perkins</option>
+                    <option value="Fleetward">Fleetward</option>
+                    <option value="Yandong">Yandong</option>
+                    <option value="Baldwing">Baldwing</option>
+                    <option value="Genérico">Genérico</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <input type="text" id="marcaOtro" placeholder="Especifique la marca" style="display: none; margin-top: 0.5rem;" />
+
+                <label>Categoría</label>
+                <select th:field="*{categoria}">
+                    <option value="">Seleccione...</option>
+                    <option value="Repuestos">Repuestos</option>
+                    <option value="Filtración">Filtración</option>
+                </select>
+
+                <label>Número de factura</label>
+                <input type="text" th:field="*{vehiculoAplicacion}" placeholder="Ej: 001-12345" />
+
+                <label>Ubicación en bodega</label>
+                <input type="text" th:field="*{ubicacionBodega}" placeholder="Se asignará al guardar (o escriba una)" title="Si lo deja en blanco, el sistema asigna una ubicación al guardar según el inventario." />
+
+                <label>Descripción detallada (ficha)</label>
+                <textarea th:field="*{descripcion}" rows="4" placeholder="Descripción larga del repuesto: especificaciones, compatibilidades, notas de uso..." style="width: 100%; padding: 0.65rem 1rem; margin-bottom: 1rem; background: var(--industrial-bg); border: 1px solid var(--industrial-border); border-radius: var(--industrial-radius); color: var(--industrial-text); font-size: 1rem; resize: vertical;"></textarea>
+
+                <label>Foto del repuesto (máx. 10 MB)</label>
+                <input type="file" name="imagenArchivo" id="imagenArchivo" accept="image/*" />
+                <p id="errorImagen" class="error" style="display: none; margin-top: 0.5rem;"></p>
+
+                <label>Cantidad inicial</label>
+                <input type="number" th:field="*{cantidad}" min="1" required title="Mínimo 1" />
+
+                <label>Stock mínimo recomendado</label>
+                <input type="number" th:field="*{stockMinimo}" placeholder="Ej: 5" />
+
+                <label>Precio unitario</label>
+                <span style="display: inline-flex; align-items: center; width: 100%;">
+                    <span style="padding: 0.65rem 0.5rem 0.65rem 1rem; background: var(--industrial-bg); border: 1px solid var(--industrial-border); border-right: none; border-radius: var(--industrial-radius) 0 0 var(--industrial-radius); color: var(--industrial-text-muted);">$</span>
+                    <input type="number" th:field="*{precio}" step="0.01" min="0" required style="border-radius: 0 var(--industrial-radius) var(--industrial-radius) 0; flex: 1;" />
+                </span>
+
+                <button type="submit">Guardar repuesto</button>
+            </form>
+
+            <a th:href="@{/producto/lista}" class="form-link">← Ver lista de repuestos</a>
+            <a th:href="@{/menu}" class="form-link">← Volver al menú</a>
+        </div>
+    </main>
+
+    <script>
+(function() {
+    var MAX_MB = 10;
+    var MAX_BYTES = MAX_MB * 1024 * 1024;
+    var form = document.getElementById('formRepuesto');
+    var inputFile = document.getElementById('imagenArchivo');
+    var errorMsg = document.getElementById('errorImagen');
+    var marcaSelect = document.getElementById('marcaSelect');
+    var marcaValor = document.querySelector('input[name="producto.marca"]');
+    var marcaOtro = document.getElementById('marcaOtro');
+
+    function hideError() {
+        if (errorMsg) { errorMsg.style.display = 'none'; errorMsg.textContent = ''; }
+    }
+
+    function showError(msg) {
+        if (errorMsg) { errorMsg.textContent = msg; errorMsg.style.display = 'block'; }
+    }
+
+    if (marcaSelect && marcaOtro) {
+        marcaSelect.addEventListener('change', function() {
+            marcaOtro.style.display = this.value === 'Otro' ? 'block' : 'none';
+            if (this.value !== 'Otro') marcaOtro.value = '';
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            var file = inputFile && inputFile.files && inputFile.files[0];
+            if (file && file.size > MAX_BYTES) {
+                e.preventDefault();
+                showError('La imagen no debe superar ' + MAX_MB + ' MB. Elija una de menor tamaño.');
+                return false;
+            }
+            if (marcaSelect && marcaValor) {
+                if (marcaSelect.value === 'Otro') {
+                    if (!marcaOtro || !marcaOtro.value.trim()) {
+                        e.preventDefault();
+                        showError('Si eligió "Otro" en marca, especifique cuál.');
+                        return false;
+                    }
+                    marcaValor.value = marcaOtro.value.trim();
+                } else {
+                    marcaValor.value = marcaSelect.value || '';
+                }
+            }
+            var cant = document.querySelector('input[name="producto.cantidad"]');
+            if (cant && (cant.value === '' || parseInt(cant.value, 10) < 1)) {
+                e.preventDefault();
+                showError('La cantidad debe ser al menos 1.');
+                return false;
+            }
+            hideError();
+        });
+    }
+
+    if (inputFile) inputFile.addEventListener('change', hideError);
+})();
+    </script>
 </body>
 </html>

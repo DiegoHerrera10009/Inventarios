@@ -1,0 +1,474 @@
+/* Tema industrial: bodega / taller - grises oscuros + acento ámbar */
+:root {
+    --industrial-bg: #1a1d23;
+    --industrial-surface: #252a33;
+    --industrial-surface-hover: #2d333d;
+    --industrial-border: #3d4550;
+    --industrial-accent: #e67e22;
+    --industrial-accent-hover: #d35400;
+    --industrial-accent-light: rgba(230, 126, 34, 0.15);
+    --industrial-text: #ecf0f1;
+    --industrial-text-muted: #95a5a6;
+    --industrial-success: #27ae60;
+    --industrial-warning: #f39c12;
+    --industrial-danger: #c0392b;
+    --industrial-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --industrial-radius: 8px;
+    --industrial-radius-lg: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body.industrial {
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    background: var(--industrial-bg);
+    color: var(--industrial-text);
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+/* Barras y cabeceras */
+.industrial .navbar {
+    background: var(--industrial-surface);
+    border-bottom: 2px solid var(--industrial-accent);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.industrial .navbar-brand {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--industrial-text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.industrial .navbar-brand::before {
+    content: '';
+    width: 8px;
+    height: 24px;
+    background: var(--industrial-accent);
+    border-radius: 2px;
+}
+
+.industrial .navbar-actions a {
+    color: var(--industrial-text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--industrial-radius);
+    transition: color 0.2s, background 0.2s;
+}
+
+.industrial .navbar-actions a:hover {
+    color: var(--industrial-accent);
+    background: var(--industrial-accent-light);
+}
+
+/* Contenedores tipo panel */
+.industrial .panel {
+    background: var(--industrial-surface);
+    border: 1px solid var(--industrial-border);
+    border-radius: var(--industrial-radius-lg);
+    box-shadow: var(--industrial-shadow);
+    padding: 1.5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.industrial .panel h1,
+.industrial .panel h2 {
+    color: var(--industrial-text);
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+}
+
+.industrial .panel .subtitle {
+    color: var(--industrial-text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Cabecera de página con icono (mismo estilo que el menú) */
+.industrial .panel-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.industrial .panel-header-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--industrial-accent-light);
+    border-radius: var(--industrial-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--industrial-accent);
+    flex-shrink: 0;
+}
+
+.industrial .panel-header-text h2 {
+    margin-bottom: 0.25rem;
+}
+
+.industrial .panel-header-text .subtitle {
+    margin-bottom: 0;
+}
+
+/* Tarjetas del menú interactivas */
+.industrial .menu-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.25rem;
+}
+
+.industrial .menu-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: var(--industrial-surface);
+    border: 1px solid var(--industrial-border);
+    border-radius: var(--industrial-radius-lg);
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.industrial .menu-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border-color: var(--industrial-accent);
+    background: var(--industrial-surface-hover);
+}
+
+.industrial .menu-card .card-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--industrial-accent-light);
+    border-radius: var(--industrial-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--industrial-accent);
+}
+
+.industrial .menu-card .card-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+    color: var(--industrial-text);
+}
+
+.industrial .menu-card .card-desc {
+    font-size: 0.8rem;
+    color: var(--industrial-text-muted);
+}
+
+.industrial .menu-card.menu-card-logout:hover {
+    border-color: var(--industrial-danger);
+}
+
+.industrial .menu-card.menu-card-logout .card-icon {
+    background: rgba(192, 57, 43, 0.2);
+    color: #e74c3c;
+}
+
+/* Botones */
+.industrial .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--industrial-radius);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.industrial .btn-primary {
+    background: var(--industrial-accent);
+    color: #fff;
+}
+
+.industrial .btn-primary:hover {
+    background: var(--industrial-accent-hover);
+    transform: translateY(-1px);
+}
+
+.industrial .btn-secondary {
+    background: var(--industrial-border);
+    color: var(--industrial-text);
+}
+
+.industrial .btn-secondary:hover {
+    background: var(--industrial-surface-hover);
+}
+
+.industrial .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+/* Formularios */
+.industrial label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--industrial-text-muted);
+    margin-bottom: 0.35rem;
+}
+
+.industrial input[type="text"],
+.industrial input[type="search"],
+.industrial input[type="password"],
+.industrial input[type="email"],
+.industrial input[type="number"],
+.industrial input[type="file"],
+.industrial select,
+.industrial textarea {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    margin-bottom: 1rem;
+    background: var(--industrial-bg);
+    border: 1px solid var(--industrial-border);
+    border-radius: var(--industrial-radius);
+    color: var(--industrial-text);
+    font-size: 1rem;
+}
+
+.industrial input:focus,
+.industrial select:focus {
+    outline: none;
+    border-color: var(--industrial-accent);
+    box-shadow: 0 0 0 2px var(--industrial-accent-light);
+}
+
+.industrial input::placeholder {
+    color: var(--industrial-text-muted);
+    opacity: 0.8;
+}
+
+.industrial button[type="submit"] {
+    width: 100%;
+    padding: 0.85rem;
+    background: var(--industrial-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--industrial-radius);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.industrial button[type="submit"]:hover {
+    background: var(--industrial-accent-hover);
+}
+
+.industrial .form-link {
+    display: block;
+    margin-top: 1rem;
+    color: var(--industrial-text-muted);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.industrial .form-link:hover {
+    color: var(--industrial-accent);
+}
+
+.industrial .error {
+    color: var(--industrial-danger);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Tablas */
+.industrial .table-wrap {
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.industrial table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.industrial th,
+.industrial td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--industrial-border);
+}
+
+.industrial th {
+    background: var(--industrial-bg);
+    color: var(--industrial-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.industrial tr:hover {
+    background: var(--industrial-surface-hover);
+}
+
+.industrial .foto-miniatura {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--industrial-radius);
+    border: 1px solid var(--industrial-border);
+}
+
+.industrial tr.alerta {
+    background: rgba(243, 156, 18, 0.1);
+}
+
+/* Página centrada (login, registro, formularios) */
+.industrial .page-center {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.industrial .page-center .panel {
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Inicio / landing */
+.industrial .landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem 2rem;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.industrial .landing h1 {
+    font-size: 2.25rem;
+    color: var(--industrial-text);
+    margin-bottom: 1rem;
+    font-weight: 800;
+}
+
+.industrial .landing .subtitle {
+    font-size: 1.05rem;
+    color: var(--industrial-text-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.industrial .landing .btn {
+    margin-right: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Selector con búsqueda (registrar salida) */
+.industrial .searchable-select {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.industrial .searchable-select-hidden {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.industrial .searchable-select-input {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    background: var(--industrial-bg);
+    border: 1px solid var(--industrial-border);
+    border-radius: var(--industrial-radius);
+    color: var(--industrial-text);
+    font-size: 1rem;
+}
+
+.industrial .searchable-select-input:focus {
+    outline: none;
+    border-color: var(--industrial-accent);
+    box-shadow: 0 0 0 2px var(--industrial-accent-light);
+}
+
+.industrial .searchable-select-input.placeholder {
+    color: var(--industrial-text-muted);
+}
+
+.industrial .searchable-select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    background: var(--industrial-surface);
+    border: 1px solid var(--industrial-border);
+    border-top: none;
+    border-radius: 0 0 var(--industrial-radius) var(--industrial-radius);
+    box-shadow: var(--industrial-shadow);
+    z-index: 10;
+    display: none;
+}
+
+.industrial .searchable-select-dropdown.is-open {
+    display: block;
+}
+
+.industrial .searchable-select-option {
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    color: var(--industrial-text);
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--industrial-border);
+    transition: background 0.15s;
+}
+
+.industrial .searchable-select-option:last-child {
+    border-bottom: none;
+}
+
+.industrial .searchable-select-option:hover,
+.industrial .searchable-select-option[aria-selected="true"] {
+    background: var(--industrial-accent-light);
+    color: var(--industrial-accent);
+}
+
+.industrial .searchable-select-option small {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--industrial-text-muted);
+    margin-top: 0.2rem;
+}
+
+@media (max-width: 600px) {
+    .industrial .menu-cards {
+        grid-template-columns: 1fr;
+    }
+}

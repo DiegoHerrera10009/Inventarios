@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stock bajo - Inventario Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+</head>
+<body class="industrial">
+    <header class="navbar">
+        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
+        <nav class="navbar-actions">
+            <a th:href="@{/producto/lista}">Inventario</a>
+            <a th:href="@{/menu}">Menú</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+        </nav>
+    </header>
+
+    <main style="padding: 2rem 1.5rem;">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-header-icon">⚠️</div>
+                <div class="panel-header-text">
+                    <h2>Repuestos con stock bajo</h2>
+                    <p class="subtitle">Cantidad menor o igual al stock mínimo configurado.</p>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Marca</th>
+                            <th>Stock</th>
+                            <th>Mín.</th>
+                            <th>Precio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="producto : ${productos}"
+                            th:classappend="${producto.stockMinimo != null and producto.cantidad <= producto.stockMinimo} ? 'alerta'">
+                            <td th:text="${producto.codigo}">—</td>
+                            <td th:text="${producto.nombre}">—</td>
+                            <td th:text="${producto.marca}">—</td>
+                            <td th:text="${producto.cantidad}">—</td>
+                            <td th:text="${producto.stockMinimo}">—</td>
+                            <td th:text="${'$ ' + #numbers.formatDecimal(producto.precio, 1, 'POINT', 2, 'COMMA')}">—</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/producto/lista}" class="btn btn-primary">Ver todo el inventario</a>
+                <a th:href="@{/menu}" class="btn btn-secondary">Volver al menú</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

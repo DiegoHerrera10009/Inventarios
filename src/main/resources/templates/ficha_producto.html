@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ficha del repuesto - Inventario Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+    <style>
+        .ficha-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
+        @media (max-width: 700px) { .ficha-layout { grid-template-columns: 1fr; } }
+        .ficha-foto {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 1;
+            object-fit: contain;
+            background: var(--industrial-bg);
+            border: 1px solid var(--industrial-border);
+            border-radius: var(--industrial-radius-lg);
+        }
+        .ficha-placeholder {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 1;
+            background: var(--industrial-bg);
+            border: 1px dashed var(--industrial-border);
+            border-radius: var(--industrial-radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--industrial-text-muted);
+            font-size: 0.9rem;
+        }
+        .ficha-datos { display: flex; flex-direction: column; gap: 0.75rem; }
+        .ficha-fila { display: grid; grid-template-columns: 140px 1fr; gap: 0.75rem; align-items: baseline; }
+        .ficha-fila .etiqueta { color: var(--industrial-text-muted); font-size: 0.85rem; font-weight: 600; }
+        .ficha-fila .valor { color: var(--industrial-text); }
+        .ficha-descripcion {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--industrial-bg);
+            border: 1px solid var(--industrial-border);
+            border-radius: var(--industrial-radius);
+            color: var(--industrial-text);
+            white-space: pre-wrap;
+            line-height: 1.6;
+            min-height: 80px;
+        }
+    </style>
+</head>
+<body class="industrial">
+    <header class="navbar">
+        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
+        <nav class="navbar-actions">
+            <a th:href="@{/producto/lista}">Inventario</a>
+            <a th:href="@{/menu}">Menú</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+        </nav>
+    </header>
+
+    <main style="padding: 2rem 1.5rem;">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-header-icon">📋</div>
+                <div class="panel-header-text">
+                    <h2>Ficha del repuesto</h2>
+                    <p class="subtitle" th:text="${producto.codigo} ?: 'Sin código'">Código</p>
+                </div>
+            </div>
+
+            <div class="ficha-layout">
+                <div>
+                    <img th:if="${producto.imagenNombre != null}"
+                         th:src="@{'/uploads/' + ${producto.imagenNombre}}"
+                         alt="Foto del repuesto"
+                         class="ficha-foto" />
+                    <div th:if="${producto.imagenNombre == null}" class="ficha-placeholder">Sin imagen</div>
+                </div>
+                <div class="ficha-datos">
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Código</span>
+                        <span class="valor" th:text="${producto.codigo}">—</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Nombre</span>
+                        <span class="valor" th:text="${producto.nombre}">—</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Marca</span>
+                        <span class="valor" th:text="${producto.marca}">—</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Categoría</span>
+                        <span class="valor" th:text="${producto.categoria}">—</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Nº de factura</span>
+                        <span class="valor" th:text="${producto.vehiculoAplicacion}">—</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Ubicación bodega</span>
+                        <span class="valor" th:text="${producto.ubicacionBodega}">—</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Stock actual</span>
+                        <span class="valor" th:text="${producto.cantidad}">0</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Stock mínimo</span>
+                        <span class="valor" th:text="${producto.stockMinimo}">—</span>
+                    </div>
+                    <div class="ficha-fila">
+                        <span class="etiqueta">Precio unitario</span>
+                        <span class="valor" th:text="${'$ ' + #numbers.formatDecimal(producto.precio, 1, 'POINT', 2, 'COMMA')}">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${producto.descripcion != null && !producto.descripcion.isEmpty()}" style="margin-top: 1.5rem;">
+                <div class="ficha-fila" style="margin-bottom: 0.5rem;">
+                    <span class="etiqueta">Descripción detallada</span>
+                </div>
+                <div class="ficha-descripcion" th:text="${producto.descripcion}">Descripción larga del repuesto.</div>
+            </div>
+            <div th:if="${producto.descripcion == null || producto.descripcion.isEmpty()}" style="margin-top: 1rem;">
+                <p class="subtitle">Sin descripción detallada.</p>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/producto/entrada-stock/{id}(id=${producto.id})}" class="btn btn-primary">Añadir stock</a>
+                <a th:href="@{/producto/lista}" class="btn btn-secondary">Volver al inventario</a>
+                <a th:href="@{/menu}" class="btn btn-secondary">Menú</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

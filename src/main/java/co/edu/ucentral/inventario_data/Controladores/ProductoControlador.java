@@ -6,8 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/producto")
@@ -23,15 +30,73 @@ public class ProductoControlador {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@ModelAttribute Producto producto) {
-        productoServicio.guardarProducto(producto);
+    public String guardarProducto(@ModelAttribute Producto producto,
+                                  @RequestParam(value = "imagenArchivo", required = false) MultipartFile imagenArchivo,
+                                  Model modelo) {
+        if (imagenArchivo != null && !imagenArchivo.isEmpty()) {
+            String nombreArchivo = UUID.randomUUID() + "_" + imagenArchivo.getOriginalFilename();
+            Path rutaUploads = Paths.get("uploads");
+            try {
+                Files.createDirectories(rutaUploads);
+                Files.copy(imagenArchivo.getInputStream(),
+                        rutaUploads.resolve(nombreArchivo),
+                        StandardCopyOption.REPLACE_EXISTING);
+                producto.setImagenNombre(nombreArchivo);
+            } catch (IOException e) {
+                // En un proyecto real se debería registrar el error con un logger
+            }
+        }
+
+        String resultado = productoServicio.guardarProducto(producto);
+        if ("codigo_duplicado".equals(resultado)) {
+            modelo.addAttribute("producto", producto);
+            modelo.addAttribute("errorCodigo", "Ya existe un repuesto con esa referencia (código). La referencia debe ser única.");
+            return "nuevo_Producto";
+        }
         return "redirect:/producto/lista";
     }
 
     @GetMapping("/lista")
-    public String listarProductos(Model modelo) {
-        List<Producto> productos = productoServicio.obtenerTodos();
+    public String listarProductos(@RequestParam(value = "q", required = false) String busqueda, Model modelo) {
+        List<Producto> productos = productoServicio.buscarPorReferenciaONombre(busqueda);
         modelo.addAttribute("productos", productos);
+        modelo.addAttribute("busqueda", busqueda != null ? busqueda : "");
         return "lista_productos";
+    }
+
+    @GetMapping("/stock-bajo")
+    public String listarProductosConStockBajo(Model modelo) {
+        List<Producto> productos = productoServicio.obtenerConStockBajo();
+        modelo.addAttribute("productos", productos);
+        return "lista_stock_bajo";
+    }
+
+    @GetMapping("/ficha/{id}")
+    public String verFicha(@PathVariable Long id, Model modelo) {
+        return productoServicio.obtenerPorId(id)
+                .map(p -> {
+                    modelo.addAttribute("producto", p);
+                    return "ficha_producto";
+                })
+                .orElse("redirect:/producto/lista");
+    }
+
+    @GetMapping("/entrada-stock/{id}")
+    public String formularioEntradaStock(@PathVariable Long id, Model modelo) {
+        return productoServicio.obtenerPorId(id)
+                .map(p -> {
+                    modelo.addAttribute("producto", p);
+                    return "entrada_stock";
+                })
+                .orElse("redirect:/producto/lista");
+    }
+
+    @PostMapping("/entrada-stock/{id}")
+    public String procesarEntradaStock(@PathVariable Long id, @RequestParam("cantidad") int cantidad) {
+        if (cantidad < 1) {
+            return "redirect:/producto/entrada-stock/" + id;
+        }
+        productoServicio.anadirStock(id, cantidad);
+        return "redirect:/producto/lista";
     }
 }

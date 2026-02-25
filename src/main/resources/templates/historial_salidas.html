@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Historial de salidas - Inventario Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+</head>
+<body class="industrial">
+    <header class="navbar">
+        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
+        <nav class="navbar-actions">
+            <a th:href="@{/producto/lista}">Inventario</a>
+            <a th:href="@{/menu}">Menú</a>
+            <a th:href="@{/logout}">Cerrar sesión</a>
+        </nav>
+    </header>
+
+    <main style="padding: 2rem 1.5rem;">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-header-icon">📑</div>
+                <div class="panel-header-text">
+                    <h2>Historial de salidas</h2>
+                    <p class="subtitle">Listado de movimientos de salida de repuestos.</p>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Código</th>
+                            <th>Repuesto</th>
+                            <th>Marca</th>
+                            <th>Cantidad</th>
+                            <th>Motivo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="salida : ${salidas}">
+                            <td th:text="${#temporals.format(salida.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2025 10:00</td>
+                            <td th:text="${salida.producto.codigo}">COD-001</td>
+                            <td th:text="${salida.producto.nombre}">Repuesto X</td>
+                            <td th:text="${salida.producto.marca}">Marca</td>
+                            <td th:text="${salida.cantidad}">0</td>
+                            <td th:text="${salida.motivo}">Venta</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/salida/formulario}" class="btn btn-primary">Registrar nueva salida</a>
+                <a th:href="@{/menu}" class="btn btn-secondary">Volver al menú</a>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
+
