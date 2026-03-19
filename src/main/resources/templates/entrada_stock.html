@@ -10,18 +10,54 @@
         .ficha-fila .etiqueta { color: var(--industrial-text-muted); font-size: 0.85rem; font-weight: 600; }
         .ficha-fila .valor { color: var(--industrial-text); }
     </style>
+    </style>
 </head>
 <body class="industrial">
-    <header class="navbar">
-        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
-        <nav class="navbar-actions">
-            <a th:href="@{/producto/lista}">Inventario</a>
-            <a th:href="@{/menu}">Menú</a>
-            <a th:href="@{/logout}">Cerrar sesión</a>
-        </nav>
-    </header>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <span class="sidebar-logo"></span>
+                    <div class="sidebar-title">
+                        <span>Inventario</span>
+                        <small>Repuestos diesel</small>
+                    </div>
+                </div>
+            </div>
 
-    <main style="padding: 2rem 1.5rem;">
+            <nav class="sidebar-nav">
+                <p class="sidebar-section-label">Panel</p>
+                <a th:href="@{/menu}" class="sidebar-link">
+                    <span class="sidebar-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <p class="sidebar-section-label">Inventario</p>
+                <a th:href="@{/producto/lista}" class="sidebar-link is-active">
+                    <span class="sidebar-icon">📦</span>
+                    <span>Productos</span>
+                </a>
+                <a th:href="@{/salida/formulario}" class="sidebar-link">
+                    <span class="sidebar-icon">📤</span>
+                    <span>Registrar salida</span>
+                </a>
+                <a th:href="@{/salida/historial}" class="sidebar-link">
+                    <span class="sidebar-icon">📑</span>
+                    <span>Movimientos</span>
+                </a>
+
+                <div class="sidebar-footer">
+                    <a th:href="@{/logout}" class="sidebar-link sidebar-link-logout">
+                        <span class="sidebar-icon">🚪</span>
+                        <span>Cerrar sesión</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Contenido principal -->
+        <main class="layout-main">
         <div class="panel" style="max-width: 420px;">
             <div class="panel-header">
                 <div class="panel-header-icon">📥</div>
@@ -49,6 +85,7 @@
             <a th:href="@{/producto/ficha/{id}(id=${producto.id})}" class="form-link">← Ver ficha del repuesto</a>
             <a th:href="@{/producto/lista}" class="form-link">← Volver al inventario</a>
         </div>
-    </main>
+        </main>
+    </div>
 </body>
 </html>

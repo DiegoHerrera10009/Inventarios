@@ -44,4 +44,22 @@ public class SalidaProductoControlador {
         modelo.addAttribute("salidas", salidaServicio.obtenerHistorial());
         return "historial_salidas";
     }
+
+    @GetMapping(value = "/exportar.csv", produces = "text/csv")
+    @ResponseBody
+    public String exportarHistorialCsv() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID;Fecha;CodigoProducto;NombreProducto;Marca;Cantidad;Motivo\n");
+        salidaServicio.obtenerHistorial().forEach(s -> {
+            sb.append(s.getId() != null ? s.getId() : "").append(";");
+            sb.append(s.getFecha() != null ? s.getFecha() : "").append(";");
+            Producto p = s.getProducto();
+            sb.append(p != null && p.getCodigo() != null ? p.getCodigo() : "").append(";");
+            sb.append(p != null && p.getNombre() != null ? p.getNombre() : "").append(";");
+            sb.append(p != null && p.getMarca() != null ? p.getMarca() : "").append(";");
+            sb.append(s.getCantidad()).append(";");
+            sb.append(s.getMotivo() != null ? s.getMotivo() : "").append("\n");
+        });
+        return sb.toString();
+    }
 }

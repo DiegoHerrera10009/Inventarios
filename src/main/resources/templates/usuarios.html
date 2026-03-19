@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Usuarios - Inventario de Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+</head>
+<body class="industrial">
+<div class="layout">
+    <!-- Sidebar reutilizada del dashboard (link de Usuarios activo) -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <span class="sidebar-logo"></span>
+                <div class="sidebar-title">
+                    <span>Inventario</span>
+                    <small>Repuestos diesel</small>
+                </div>
+            </div>
+            <div class="sidebar-user">
+                <span class="sidebar-user-name"
+                      th:text="${usuarioActual != null ? usuarioActual.nombre : 'Usuario'}">Usuario</span>
+                <span class="sidebar-user-role chip"
+                      th:text="${usuarioActual != null && usuarioActual.rol != null ? usuarioActual.rol : 'ADMIN'}">ADMIN</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <p class="sidebar-section-label">Panel</p>
+            <a th:href="@{/menu}" class="sidebar-link">
+                <span class="sidebar-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+
+            <p class="sidebar-section-label">Inventario</p>
+            <a th:href="@{/producto/lista}" class="sidebar-link">
+                <span class="sidebar-icon">📦</span>
+                <span>Productos</span>
+            </a>
+            <a th:href="@{/salida/formulario}" class="sidebar-link">
+                <span class="sidebar-icon">📤</span>
+                <span>Registrar salida</span>
+            </a>
+            <a th:href="@{/salida/historial}" class="sidebar-link">
+                <span class="sidebar-icon">📑</span>
+                <span>Movimientos</span>
+            </a>
+
+            <p class="sidebar-section-label">Administración</p>
+            <a th:href="@{/producto/formulario}" class="sidebar-link">
+                <span class="sidebar-icon">➕</span>
+                <span>Nuevo producto</span>
+            </a>
+            <a th:href="@{/producto/stock-bajo}" class="sidebar-link">
+                <span class="sidebar-icon">⚠️</span>
+                <span>Stock bajo</span>
+            </a>
+            <a th:href="@{/usuarios}" class="sidebar-link is-active">
+                <span class="sidebar-icon">👥</span>
+                <span>Usuarios</span>
+            </a>
+
+            <div class="sidebar-footer">
+                <a th:href="@{/logout}" class="sidebar-link sidebar-link-logout">
+                    <span class="sidebar-icon">🚪</span>
+                    <span>Cerrar sesión</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <main class="layout-main">
+        <header class="layout-header">
+            <div>
+                <h1 class="page-title">Usuarios</h1>
+                <p class="page-subtitle">
+                    Gestiona los roles de acceso al sistema (ADMIN / COMERCIAL).
+                </p>
+            </div>
+        </header>
+
+        <section class="panel panel-inline">
+            <div class="panel-header">
+                <div class="panel-header-icon">👥</div>
+                <div class="panel-header-text">
+                    <h2>Lista de usuarios</h2>
+                    <p class="subtitle">Cambia el rol de cada usuario según su responsabilidad.</p>
+                </div>
+            </div>
+
+            <div class="table-wrap" th:if="${#lists.size(usuarios) > 0}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol actual</th>
+                        <th>Cambiar rol</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="u : ${usuarios}">
+                        <td th:text="${u.id}">1</td>
+                        <td th:text="${u.nombre}">usuario</td>
+                        <td th:text="${u.correo}">correo@ejemplo.com</td>
+                        <td>
+                            <span class="chip" th:text="${u.rol != null ? u.rol : 'COMERCIAL'}">COMERCIAL</span>
+                        </td>
+                        <td>
+                            <form th:action="@{/usuarios/{id}/rol(id=${u.id})}" method="post" style="display: inline-flex; gap: 0.5rem; align-items: center;">
+                                <select name="rol">
+                                    <option value="COMERCIAL"
+                                            th:selected="${u.rol == null or #strings.equalsIgnoreCase(u.rol, 'COMERCIAL')}">
+                                        COMERCIAL
+                                    </option>
+                                    <option value="ADMIN"
+                                            th:selected="${#strings.equalsIgnoreCase(u.rol, 'ADMIN')}">
+                                        ADMIN
+                                    </option>
+                                </select>
+                                <button type="submit" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem;">
+                                    Guardar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="empty-state" th:if="${#lists.size(usuarios) == 0}">
+                Todavía no hay usuarios registrados.
+            </p>
+        </section>
+    </main>
+</div>
+</body>
+</html>
+

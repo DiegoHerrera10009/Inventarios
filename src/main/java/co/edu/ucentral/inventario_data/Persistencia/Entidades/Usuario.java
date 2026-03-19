@@ -11,6 +11,7 @@ public class Usuario {
     private String nombre;
     private String contrasena;
     private String correo;
+    private String rol; // ADMIN o COMERCIAL
 
     // Getters y Setters
     public Long getId() { return id; }
@@ -24,4 +25,7 @@ public class Usuario {
 
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
+
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
 }

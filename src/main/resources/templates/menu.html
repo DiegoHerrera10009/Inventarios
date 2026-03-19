@@ -3,55 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Inventario de Repuestos - Menú</title>
-    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+    <title>Dashboard - Inventario de Repuestos</title>
+    <link rel="stylesheet" th:href="@{/css/industrial.css?v=2}">
 </head>
 <body class="industrial">
-    <header class="navbar">
-        <a class="navbar-brand" th:href="@{/menu}">Inventario Repuestos</a>
-        <nav class="navbar-actions">
-            <a th:href="@{/logout}">Cerrar sesión</a>
-        </nav>
-    </header>
+    <div class="app-container">
+        <div class="app-window">
+            <!-- Sidebar -->
+            <aside class="app-sidebar">
+                <div class="sidebar-logo">
+                    <div class="icon">R</div>
+                    <div>
+                        <h2>Inventario</h2>
+                        <span>Repuestos Diesel</span>
+                    </div>
+                </div>
 
-    <main style="padding: 2rem 1.5rem;">
-        <div class="panel">
-            <h2>Panel de control</h2>
-            <p class="subtitle">Repuestos para vehículos y equipos diesel de generadores eléctricos. Gestiona tu bodega en Bogotá.</p>
+                <div class="nav-section">
+                    <div class="nav-label">Panel</div>
+                    <a th:href="@{/menu}" class="nav-link active">
+                        <span class="emoji">📊</span> Dashboard
+                    </a>
+                </div>
 
-            <div class="menu-cards">
-                <a th:href="@{/producto/lista}" class="menu-card">
-                    <div class="card-icon">📦</div>
-                    <div class="card-title">Ver inventario</div>
-                    <div class="card-desc">Consulta todo el stock de repuestos</div>
-                </a>
-                <a th:href="@{/producto/stock-bajo}" class="menu-card">
-                    <div class="card-icon">⚠️</div>
-                    <div class="card-title">Stock bajo</div>
-                    <div class="card-desc">Repuestos por debajo del mínimo</div>
-                </a>
-                <a th:href="@{/producto/formulario}" class="menu-card">
-                    <div class="card-icon">➕</div>
-                    <div class="card-title">Registrar repuesto</div>
-                    <div class="card-desc">Alta de nuevo repuesto con foto</div>
-                </a>
-                <a th:href="@{/salida/historial}" class="menu-card">
-                    <div class="card-icon">📑</div>
-                    <div class="card-title">Historial de salidas</div>
-                    <div class="card-desc">Revisa los movimientos registrados</div>
-                </a>
-                <a th:href="@{/salida/formulario}" class="menu-card">
-                    <div class="card-icon">📤</div>
-                    <div class="card-title">Registrar salida</div>
-                    <div class="card-desc">Dar salida a repuestos (venta/taller)</div>
-                </a>
-                <a th:href="@{/logout}" class="menu-card menu-card-logout">
-                    <div class="card-icon">🚪</div>
-                    <div class="card-title">Cerrar sesión</div>
-                    <div class="card-desc">Salir del sistema</div>
-                </a>
-            </div>
+                <div class="nav-section">
+                    <div class="nav-label">Inventario</div>
+                    <a th:href="@{/producto/lista}" class="nav-link">
+                        <span class="emoji">📦</span> Productos
+                    </a>
+                    <a th:href="@{/salida/formulario}" class="nav-link">
+                        <span class="emoji">📤</span> Registrar salida
+                    </a>
+                    <a th:href="@{/salida/historial}" class="nav-link">
+                        <span class="emoji">📑</span> Movimientos
+                    </a>
+                </div>
+
+                <!-- Opciones solo para ADMIN -->
+                <div class="nav-section" th:if="${rolUsuario != null and #strings.equalsIgnoreCase(rolUsuario, 'ADMIN')}">
+                    <div class="nav-label">Administración</div>
+                    <a th:href="@{/producto/formulario}" class="nav-link">
+                        <span class="emoji">➕</span> Nuevo producto
+                    </a>
+                    <a th:href="@{/producto/stock-bajo}" class="nav-link">
+                        <span class="emoji">⚠️</span> Stock bajo
+                        <span class="nav-badge" th:if="${productosConStockBajo > 0}" th:text="${productosConStockBajo}">0</span>
+                    </a>
+                    <a th:href="@{/usuarios}" class="nav-link">
+                        <span class="emoji">👥</span> Usuarios
+                    </a>
+                </div>
+
+                <div class="sidebar-footer">
+                    <div class="user-chip" style="margin-bottom: 1rem;">
+                        <span th:text="${nombreUsuario}">Usuario</span>
+                        <span class="role" th:text="${rolUsuario != null ? rolUsuario : 'COMERCIAL'}">ROL</span>
+                    </div>
+                    <a th:href="@{/logout}" class="nav-link" style="color: var(--danger); justify-content: center; background: rgba(255,0,85,0.1);">
+                        Salir del sistema
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Contenido principal -->
+            <main class="app-content">
+                <header class="header-bar">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                        <p th:text="${rolUsuario != null and #strings.equalsIgnoreCase(rolUsuario, 'ADMIN')} ? 'Panel de administrador' : 'Panel comercial'">Resumen de la aplicación</p>
+                        
+                        <div th:if="${productosConStockBajo > 0}" style="margin-top: 0.5rem; display: inline-block; background: rgba(255,191,0,0.1); border: 1px solid rgba(255,191,0,0.2); padding: 0.4rem 1rem; border-radius: var(--radius-full); color: var(--warning); font-size: 0.85rem; font-weight: 500;">
+                            ⚠️ <strong th:text="${productosConStockBajo}">0</strong> productos requieren reabastecimiento.
+                            <a th:href="@{/producto/stock-bajo}" style="color: var(--text-primary); text-decoration: underline; margin-left: 0.5rem;">Ver alertas</a>
+                        </div>
+                    </div>
+
+                    <form class="search-bar" th:action="@{/producto/lista}" method="get">
+                        <div class="input-icon-wrap">
+                            <span class="icon" style="font-size: 1rem;">🔍</span>
+                            <input type="search" name="q" placeholder="Buscar producto..." aria-label="Buscar" style="width: 260px;">
+                        </div>
+                    </form>
+                </header>
+
+                <!-- Métricas principales -->
+                <section class="metrics">
+                    <div class="metric-card glass-panel">
+                        <div class="metric-head">
+                            <span class="metric-title">Productos Totales</span>
+                            <span class="metric-icon">📦</span>
+                        </div>
+                        <div class="metric-value" th:text="${totalProductos}">0</div>
+                    </div>
+
+                    <div class="metric-card glass-panel" th:classappend="${productosConStockBajo > 0} ? ' metric-card-warning'">
+                        <div class="metric-head">
+                            <span class="metric-title">Stock Bajo / Crítico</span>
+                            <span class="metric-icon" th:text="${productosConStockBajo > 0 ? '⚠️' : '✅'}">✅</span>
+                        </div>
+                        <div class="metric-value" th:text="${productosConStockBajo}">0</div>
+                    </div>
+
+                    <div class="metric-card glass-panel">
+                        <div class="metric-head">
+                            <span class="metric-title">Movimientos Registrados</span>
+                            <span class="metric-icon">📑</span>
+                        </div>
+                        <div class="metric-value" th:text="${totalMovimientos}">0</div>
+                    </div>
+                </section>
+
+                <!-- Actividad reciente -->
+                <section class="content-section glass-panel">
+                    <div class="section-head">
+                        <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(0, 240, 255, 0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem;">⏱️</div>
+                        <h2>Salidas Recientes</h2>
+                    </div>
+
+                    <div class="table-wrapper" th:if="${#lists.size(salidasRecientes) > 0}">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Código</th>
+                                    <th>Repuesto</th>
+                                    <th>Cantidad</th>
+                                    <th>Motivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="salida : ${salidasRecientes}">
+                                    <td th:text="${#temporals.format(salida.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2025 10:00</td>
+                                    <td><span class="pill" th:text="${salida.producto.codigo}">COD</span></td>
+                                    <td th:text="${salida.producto.nombre}">Repuesto</td>
+                                    <td th:text="${salida.cantidad}" style="font-weight: 700;">0</td>
+                                    <td th:text="${salida.motivo}">Venta</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div th:if="${#lists.size(salidasRecientes) == 0}" style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        Aún no hay movimientos registrados hoy.
+                    </div>
+
+                    <div style="margin-top: 2.5rem; display: flex; gap: 1rem;">
+                        <a th:href="@{/salida/formulario}" class="btn btn-primary">Nueva Salida</a>
+                        <a th:href="@{/salida/historial}" class="btn btn-secondary">Ver Historial</a>
+                    </div>
+                </section>
+            </main>
         </div>
-    </main>
+    </div>
 </body>
 </html>

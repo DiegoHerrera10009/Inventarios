@@ -1,5 +1,6 @@
 package co.edu.ucentral.inventario_data;
 
+import co.edu.ucentral.inventario_data.Persistencia.Entidades.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +35,29 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.sendRedirect(contextPath + "/login");
             return false;
         }
+
+        // Control básico de acceso por rol (ADMIN / COMERCIAL)
+        Usuario usuario = (Usuario) usuarioLogueado;
+        String rol = usuario.getRol() != null ? usuario.getRol().toUpperCase() : "COMERCIAL";
+
+        // Rutas de gestión de productos solo para ADMIN
+        if (path.startsWith("/producto/")) {
+            boolean esRutaSoloLectura =
+                    path.equals("/producto/lista")
+                            || path.startsWith("/producto/ficha");
+            if (!esRutaSoloLectura && !"ADMIN".equals(rol)) {
+                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return false;
+            }
+        }
+
+        // Gestión de usuarios solo para ADMIN (por si se agregan más rutas)
+        if (path.startsWith("/usuarios") && !"ADMIN".equals(rol)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return false;
+        }
+
+        // Las rutas de salida (movimientos) pueden ser usadas por ADMIN y COMERCIAL
 
         return true;
     }

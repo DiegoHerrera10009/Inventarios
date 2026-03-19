@@ -1,6 +1,8 @@
 package co.edu.ucentral.inventario_data.Controladores;
 
 import co.edu.ucentral.inventario_data.Persistencia.Entidades.Usuario;
+import co.edu.ucentral.inventario_data.Servicios.ProductoServicio;
+import co.edu.ucentral.inventario_data.Servicios.SalidaProductoServicio;
 import co.edu.ucentral.inventario_data.Servicios.UsuarioServicio;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,12 @@ public class UsuarioControlador {
 
     @Autowired
     private UsuarioServicio usuarioServicio;
+
+    @Autowired
+    private ProductoServicio productoServicio;
+
+    @Autowired
+    private SalidaProductoServicio salidaProductoServicio;
 
     @GetMapping("/")
     public String inicio() {
@@ -56,6 +64,19 @@ public class UsuarioControlador {
             return "redirect:/login";
         }
         model.addAttribute("nombreUsuario", usuario.getNombre());
+        model.addAttribute("rolUsuario", usuario.getRol());
+        // Métricas básicas para el dashboard
+        long totalProductos = productoServicio.obtenerTodos().size();
+        long productosConStockBajo = productoServicio.obtenerConStockBajo().size();
+        long totalMovimientos = salidaProductoServicio.obtenerHistorial().size();
+
+        model.addAttribute("totalProductos", totalProductos);
+        model.addAttribute("productosConStockBajo", productosConStockBajo);
+        model.addAttribute("totalMovimientos", totalMovimientos);
+        model.addAttribute("salidasRecientes", salidaProductoServicio.obtenerHistorial()
+                .stream()
+                .limit(5)
+                .toList());
         return "menu";
     }
 
@@ -63,5 +84,25 @@ public class UsuarioControlador {
     public String cerrarSesion(HttpSession session) {
         session.invalidate(); // Elimina la sesión
         return "redirect:/login";
+    }
+
+    // --- Gestión básica de usuarios (solo vista simple), pensada para rol ADMIN ---
+
+    @GetMapping("/usuarios")
+    public String listarUsuarios(HttpSession session, Model model) {
+        Usuario usuarioActual = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioActual == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("usuarioActual", usuarioActual);
+        model.addAttribute("usuarios", usuarioServicio.obtenerTodos());
+        return "usuarios";
+    }
+
+    @PostMapping("/usuarios/{id}/rol")
+    public String actualizarRolUsuario(@PathVariable Long id,
+                                       @RequestParam("rol") String rol) {
+        usuarioServicio.actualizarRol(id, rol);
+        return "redirect:/usuarios";
     }
 }

@@ -4,17 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Inventario de Repuestos - Inicio</title>
-    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+    <link rel="stylesheet" th:href="@{/css/industrial.css?v=2}">
 </head>
 <body class="industrial">
-    <div class="landing">
-        <h1>Inventario de Repuestos</h1>
-        <p class="subtitle">
-            Repuestos para vehículos y equipos diesel de generadores eléctricos.
-            Optimiza el inventario de tu microempresa en Bogotá: taller automotriz o bodega de repuestos diesel.
-        </p>
-        <a th:href="@{/login}" class="btn btn-primary">Iniciar sesión</a>
-        <a th:href="@{/registro}" class="btn btn-secondary">Registrarse</a>
+    <div class="landing-wrapper">
+        <div class="landing-content">
+            <h1>Inventario Inteligente</h1>
+            <p>
+                Gestión avanzada y stock predictivo para talleres automotrices y bodegas diesel. 
+                La experiencia más fluida y profesional.
+            </p>
+            <div class="btn-group">
+                <a th:href="@{/login}" class="btn btn-primary">Iniciar sesión</a>
+                <a th:href="@{/registro}" class="btn btn-secondary glass-panel">Crear cuenta gratis</a>
+            </div>
+        </div>
     </div>
 </body>
 </html>

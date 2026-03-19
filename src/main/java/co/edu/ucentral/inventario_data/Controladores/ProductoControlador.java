@@ -61,7 +61,26 @@ public class ProductoControlador {
         List<Producto> productos = productoServicio.buscarPorReferenciaONombre(busqueda);
         modelo.addAttribute("productos", productos);
         modelo.addAttribute("busqueda", busqueda != null ? busqueda : "");
+        modelo.addAttribute("productosConStockBajo", productoServicio.obtenerConStockBajo().size());
         return "lista_productos";
+    }
+
+    @GetMapping(value = "/exportar.csv", produces = "text/csv")
+    @ResponseBody
+    public String exportarProductosCsv() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID;Codigo;Nombre;Marca;Categoria;Cantidad;StockMinimo;Precio\n");
+        productoServicio.obtenerTodos().forEach(p -> {
+            sb.append(p.getId() != null ? p.getId() : "").append(";");
+            sb.append(p.getCodigo() != null ? p.getCodigo() : "").append(";");
+            sb.append(p.getNombre() != null ? p.getNombre() : "").append(";");
+            sb.append(p.getMarca() != null ? p.getMarca() : "").append(";");
+            sb.append(p.getCategoria() != null ? p.getCategoria() : "").append(";");
+            sb.append(p.getCantidad()).append(";");
+            sb.append(p.getStockMinimo() != null ? p.getStockMinimo() : "").append(";");
+            sb.append(p.getPrecio()).append("\n");
+        });
+        return sb.toString();
     }
 
     @GetMapping("/stock-bajo")

@@ -4,22 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Iniciar sesión - Inventario Repuestos</title>
-    <link rel="stylesheet" th:href="@{/css/industrial.css}">
+    <link rel="stylesheet" th:href="@{/css/industrial.css?v=2}">
 </head>
 <body class="industrial">
-    <div class="page-center">
-        <div class="panel">
-            <h2>Iniciar sesión</h2>
-            <p class="subtitle">Accede al sistema de inventario de repuestos.</p>
+    <div class="auth-wrapper">
+        <div class="auth-card glass-panel">
+            <div class="auth-card-logo">
+                <h1>REDIESEL</h1>
+                <p>Acceso al panel de control</p>
+            </div>
+
             <form th:action="@{/login}" method="post" th:object="${usuario}">
-                <label>Usuario</label>
-                <input type="text" th:field="*{nombre}" placeholder="Nombre de usuario" required>
-                <label>Contraseña</label>
-                <input type="password" th:field="*{contrasena}" placeholder="Contraseña" required>
-                <button type="submit">Entrar</button>
+                <div class="form-group">
+                    <label>Usuario</label>
+                    <div class="input-icon-wrap">
+                        <span class="icon">👤</span>
+                        <input type="text"
+                               th:field="*{nombre}"
+                               placeholder="Tu usuario"
+                               autocomplete="username"
+                               required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <div class="input-icon-wrap">
+                        <span class="icon">🔒</span>
+                        <input type="password"
+                               th:field="*{contrasena}"
+                               placeholder="••••••••"
+                               autocomplete="current-password"
+                               required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        Acceder al Sistema
+                    </button>
+                </div>
             </form>
-            <p class="error" th:if="${error}" th:text="${error}"></p>
-            <a th:href="@{/}" class="form-link">← Volver al inicio</a>
+
+            <div class="error-msg" th:if="${error}" th:text="${error}"></div>
+
+            <div class="auth-links">
+                ¿Aún no tienes cuenta? 
+                <a th:href="@{/registro}">Regístrate ahora</a>
+            </div>
         </div>
     </div>
 </body>
